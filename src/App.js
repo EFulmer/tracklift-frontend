@@ -1,7 +1,9 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import WorkoutSet from './components/WorkoutSet.jsx';
+import React, { Component } from 'react'
+import logo from './logo.svg'
+import './App.css'
+import Workout from './components/Workout.jsx'
+import Lift from './components/Lift.jsx'
+import LiftSet from './components/LiftSet.jsx'
 
 class App extends Component {
   render() {
@@ -9,12 +11,9 @@ class App extends Component {
       <div className="App">
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
+          <h2>Welcome to Tracklift Beta!</h2>
         </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <WorkoutSet />
+        <Workout />
       </div>
     );
   }
