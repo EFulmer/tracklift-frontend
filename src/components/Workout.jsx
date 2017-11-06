@@ -4,49 +4,65 @@ import moment from 'moment'
 import {List, Map} from 'immutable'
 import Picker from 'rc-calendar'
 
-import baseUrl from '../constants.js'
+import baseURL from '../constants.js'
 import Lift from './Lift.jsx'
 
 class Workout extends Component {
   constructor(props) {
     super(props)
-    this.state = {date: moment()}
-    this.handleDateChange = this.handleDateChange.bind(this)
-    this.postWorkout = this.postWorkout.bind(this)
+    this.state = {day: moment()}
+    this.handleDayChange = this.handleDayChange.bind(this)
+    this.submitWorkout = this.submitWorkout.bind(this)
   }
 
-  handleDateChange(value) {
-    this.setState({date: moment(value)})
+  handleDayChange(value) {
+    // TODO check that it's not a future date.
+    this.setState({day: moment(value)})
   }
 
-  postWorkout() {
-    const reqURL = new URL('workout/' + this.props.workoutID, baseUrl)
-    const payload = {date: this.state.date}
-    if (this.props.workoutID === '') {
+  submitWorkout() {
+    const workoutID = this.props.workoutID ? this.props.workoutID : ''
+    const reqURL = new URL('workouts/' + workoutID, baseURL)
+    const date = String(this.state.day.date() + 1)
+    const month = String(this.state.day.month() + 1)
+    const year = String(this.state.day.year())
+    const day = month + '-' + date + '-' + year
+    const payload = {day: day}
+    // TODO could do helpers for these ... 
+    if (workoutID === '') {
       request.post(reqURL)
-             .send(payload)
-             .end((err, res) => alert(err, res))
+        .send(JSON.stringify(payload))
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .type('json')
+        .end((err, res) => {
+          alert('err = ' + JSON.stringify(err))
+          alert('res = ' + JSON.stringify(res))
+        })
     }
     else {
       request.put(reqURL)
-             .send(payload)
-             .end((err, res) => alert(err, res))
+        .send(payload)
+        .set('Content-Type', 'application/json')
+        .end((err, res) => {
+          alert('err = ' + JSON.stringify(err))
+          alert('res = ' + JSON.stringify(res))
+        })
     }
   }
 
   render() {
-    const id = this.props.id ? this.props.id : ''
     const testLift = Map({id: 0, name: 'Barbell Overhead Press', warmup: false, notes: 'Very good'})
     const lifts = List([testLift])
     const renderLifts = lifts.map(({id, name, warmup, notes}) =>
       <Lift workoutID={id} name={name} warmup={warmup} notes={notes} />
     )
     return (
-      <div idKey={id}>
+      <div id='workout'>
         <h3>Workout</h3>
-        <Picker open={true} defaultValue={this.state.date} 
-                onChange={this.handleDateChange} />
-        <input type="submit" value="Save" onClick={this.postWorkout} />
+        <Picker open={true} defaultValue={this.state.day} 
+                onChange={this.handleDayChange} />
+        <input type="submit" value="Save" onClick={this.submitWorkout} />
         {renderLifts}
       </div>
     )

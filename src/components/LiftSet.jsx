@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import request from 'superagent'
-import baseUrl from '../constants.js'
+import baseURL from '../constants.js'
 
 class LiftSet extends Component {
   render() {
@@ -38,7 +38,7 @@ class LiftSet extends Component {
                   warmup: warmup,
                   notes: notes})
                 // TODO handle undef IDs
-                const reqURL = new URL('workout/' + workoutID + '/lift/' + liftID + '/set/', baseUrl)
+                const reqURL = new URL('workout/' + workoutID + '/lift/' + liftID + '/set/', baseURL)
                 alert(payload)
                 alert(reqURL)
                 // if (id) {

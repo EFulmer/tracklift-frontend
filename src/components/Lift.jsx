@@ -1,23 +1,64 @@
 import React, {Component} from 'react'
 import request from 'superagent'
-import baseUrl from '../constants.js'
+import baseURL from '../constants.js'
 
 class Lift extends Component {
   constructor(props) {
     super(props)
+    this.state = {}
+    this.handleNameChange = this.handleNameChange.bind(this)
+    this.handleWarmupChange = this.handleWarmupChange.bind(this)
+    this.handleNotesChange = this.handleNotesChange.bind(this)
+    this.submitLift = this.submitLift.bind(this)
+  }
 
+  handleNameChange(value) {
+    this.setState({name: value})
+  }
+
+  handleWarmupChange(value) {
+    this.setState({warmup: value})
+  }
+
+  handleNotesChange(value) {
+    this.setState({notes: value})
   }
 
   submitLift() {
-  }
-  render() {
-    const id = this.props.liftID ? this.props.liftID : undefined
     const workoutID = this.props.workoutID
-    const name = this.props.name
-    const warmup = this.props.warmup
-    const notes = this.props.notes
-    // TODO see if i should change the "id"?
-    // TODO ord
+    const liftID = this.props.liftID ? this.props.liftID : ''
+    const reqURL = new URL('lift/' + liftID, baseURL)
+    const payload = {
+      workout: workoutID,
+      name: this.state.name,
+      warm_up: this.state.warmup,
+      lift_ord: 0 // TODO
+    }
+    if (liftID === '') {
+      request.post(reqURL)
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .send(payload)
+        .type('json')
+        .end((err, res) => {
+          alert('err = ' + JSON.stringify(err))
+          alert('res = ' + JSON.stringify(res))
+        })
+    }
+    else {
+      request.put(reqURL)
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .send(payload)
+        .type('json')
+        .end((err, res) => {
+          alert('err = ' + JSON.stringify(err))
+          alert('res = ' + JSON.stringify(res))
+        })
+    }
+  }
+
+  render() {
     return (
       <div id="lift">
         <td>
@@ -27,32 +68,11 @@ class Lift extends Component {
             <th>Notes</th>
           </tr>
           <tr>
-            <td><input id="name"   type="text"     value={name}     /></td>
-            <td><input id="warmup" type="checkbox" checked={warmup} /></td>
-            <td><input id="notes"  type="text"     value={notes}    /></td>
+            <td><input id="name"   type="text"     value={this.state.name || ''}     onChange={this.handleNameChange} /></td>
+            <td><input id="warmup" type="checkbox" checked={this.state.warmup} onChange={this.handleWarmupChange} /></td>
+            <td><input id="notes"  type="text"     value={this.state.notes}    onChange={this.handleNotesChange} /></td>
             <td><input id="save" type="button" value="Save Set"
-              onClick={event => {
-                const name = document.getElementById('name').value
-                const warmup = document.getElementById('warmup').value
-                const notes = document.getElementById('notes').value
-                const payload = JSON.stringify({name: name,
-                  warmup: warmup,
-                  notes: notes})
-                // TODO handle undef IDs
-                const reqURL = new URL('workout/' + workoutID + '/lift/', baseUrl)
-                if (id === undefined) {
-                  const result = request.post(reqURL)
-                    .send(payload)
-                    .end()
-                  alert(JSON.stringify(result))
-                }
-                else {
-                  const result = request.put(reqURL)
-                    .send(payload)
-                    .end()
-                  alert(result)
-                }
-              }}/></td>
+              onClick={this.submitLift} /></td>
           </tr>
         </td>
       </div>
