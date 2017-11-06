@@ -23,7 +23,7 @@ class Workout extends Component {
   submitWorkout() {
     const workoutID = this.props.workoutID ? this.props.workoutID : ''
     const reqURL = new URL('workouts/' + workoutID, baseURL)
-    const date = String(this.state.day.date() + 1)
+    const date = String(this.state.day.date())
     const month = String(this.state.day.month() + 1)
     const year = String(this.state.day.year())
     const day = month + '-' + date + '-' + year
