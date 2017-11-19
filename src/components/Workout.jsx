@@ -1,27 +1,41 @@
 import React, {Component} from 'react'
 import request from 'superagent'
 import moment from 'moment'
-import {List, Map} from 'immutable'
 import Picker from 'rc-calendar'
 
 import baseURL from '../constants.js'
-import Lift from './Lift.jsx'
 
 class Workout extends Component {
   constructor(props) {
     super(props)
-    this.state = {day: moment()}
+    // TODO will receive workoutID from parent component
+    this.state = {day: moment(), workoutID: undefined}
     this.handleDayChange = this.handleDayChange.bind(this)
     this.submitWorkout = this.submitWorkout.bind(this)
+    this.respHandler = this.respHandler.bind(this)
   }
 
   handleDayChange(value) {
-    // TODO check that it's not a future date.
-    this.setState({day: moment(value)})
+    const day = moment(value)
+    this.setState({day: day})
+  }
+
+  respHandler(resp) {
+    if (resp.statusCode === 200) {
+      const workoutID = resp.body.id
+      this.setState({workoutID: workoutID})
+    } else {
+      // TODO get a better, more descriptive error handler here.
+      alert('There was an error saving your data to the database.\n\nError:' + JSON.stringify(resp))
+    }
   }
 
   submitWorkout() {
-    const workoutID = this.props.workoutID ? this.props.workoutID : ''
+    if (this.state.day > moment()) {
+      alert("You cannot select a future date.")
+      return
+    }
+    const workoutID = this.state.workoutID || ''
     const reqURL = new URL('workouts/' + workoutID, baseURL)
     const date = String(this.state.day.date())
     const month = String(this.state.day.month() + 1)
@@ -36,34 +50,39 @@ class Workout extends Component {
         .set('Accept', 'application/json')
         .type('json')
         .end((err, res) => {
-          alert('err = ' + JSON.stringify(err))
-          alert('res = ' + JSON.stringify(res))
+          if (res) {
+            this.respHandler(res)
+          } else {
+            alert('Error submitting workout: ' + JSON.stringify(err))
+          }
         })
     }
     else {
       request.put(reqURL)
-        .send(payload)
+        .send(JSON.stringify(payload))
         .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .set('Cache-Control', 'no-cache')
+        .type('json')
         .end((err, res) => {
-          alert('err = ' + JSON.stringify(err))
-          alert('res = ' + JSON.stringify(res))
+          if (res) {
+            this.respHandler(res)
+          } else {
+            alert('Error submitting workout: ' + JSON.stringify(err))
+          }
         })
     }
   }
 
   render() {
-    const testLift = Map({id: 0, name: 'Barbell Overhead Press', warmup: false, notes: 'Very good'})
-    const lifts = List([testLift])
-    const renderLifts = lifts.map(({id, name, warmup, notes}) =>
-      <Lift workoutID={id} name={name} warmup={warmup} notes={notes} />
-    )
     return (
       <div id='workout'>
         <h3>Workout</h3>
-        <Picker open={true} defaultValue={this.state.day} 
-                onChange={this.handleDayChange} />
-        <input type="submit" value="Save" onClick={this.submitWorkout} />
-        {renderLifts}
+        <form action='#' onSubmit={this.submitWorkout}>
+          <Picker open={true} defaultValue={this.state.day} 
+                  onChange={this.handleDayChange} />
+          <input type='submit' value='Save' />
+        </form>
       </div>
     )
   }
