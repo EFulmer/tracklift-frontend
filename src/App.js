@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import logo from './logo.svg'
 import './App.css'
-import Workout from './components/Workout.jsx'
-import Lift from './components/Lift.jsx'
-import LiftSet from './components/LiftSet.jsx'
+import Main from './components/Main.jsx'
 
 class App extends Component {
   render() {
@@ -11,9 +9,9 @@ class App extends Component {
       <div className="App">
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to Tracklift Beta!</h2>
+          <h1>Welcome to Tracklift Beta!</h1>
         </div>
-        <Workout />
+        <Main />
       </div>
     );
   }

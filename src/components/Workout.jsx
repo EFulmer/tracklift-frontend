@@ -8,7 +8,6 @@ import baseURL from '../constants.js'
 class Workout extends Component {
   constructor(props) {
     super(props)
-    // TODO will receive workoutID from parent component
     this.state = {day: moment(), workoutID: undefined}
     this.handleDayChange = this.handleDayChange.bind(this)
     this.submitWorkout = this.submitWorkout.bind(this)
@@ -25,7 +24,6 @@ class Workout extends Component {
       const workoutID = resp.body.id
       this.setState({workoutID: workoutID})
     } else {
-      // TODO get a better, more descriptive error handler here.
       alert('There was an error saving your data to the database.\n\nError:' + JSON.stringify(resp))
     }
   }
