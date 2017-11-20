@@ -2,13 +2,15 @@ import React, {Component} from 'react'
 import request from 'superagent'
 import moment from 'moment'
 import Picker from 'rc-calendar'
+import {List, Map} from 'immutable'
 
 import baseURL from '../constants.js'
+import Lift from './Lift.jsx'
 
 class Workout extends Component {
   constructor(props) {
     super(props)
-    this.state = {day: moment(), workoutID: undefined}
+    this.state = {day: moment(), workoutID: undefined, lifts: List()}
     this.handleDayChange = this.handleDayChange.bind(this)
     this.submitWorkout = this.submitWorkout.bind(this)
     this.respHandler = this.respHandler.bind(this)
@@ -23,6 +25,9 @@ class Workout extends Component {
     if (resp.statusCode === 200) {
       const workoutID = resp.body.id
       this.setState({workoutID: workoutID})
+      if (this.state.lifts.isEmpty()) {
+        this.setState({lifts: this.state.lifts.push(Map())})
+      }
     } else {
       alert('There was an error saving your data to the database.\n\nError:' + JSON.stringify(resp))
     }
@@ -40,6 +45,7 @@ class Workout extends Component {
     const year = String(this.state.day.year())
     const day = month + '-' + date + '-' + year
     const payload = {day: day}
+
     // TODO could do helpers for these ... 
     if (workoutID === '') {
       request.post(reqURL)
@@ -73,6 +79,9 @@ class Workout extends Component {
   }
 
   render() {
+    let liftsComponent = this.state.lifts.map((lift) => {
+      return <Lift workoutID={this.state.workoutID} />
+    })
     return (
       <div id='workout'>
         <h3>Workout</h3>
@@ -81,6 +90,7 @@ class Workout extends Component {
                   onChange={this.handleDayChange} />
           <input type='submit' value='Save' />
         </form>
+        {liftsComponent}
       </div>
     )
   }
