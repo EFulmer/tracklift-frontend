@@ -9,8 +9,9 @@ Features
 
 Coding Style
 -----
+- [ ] Switch to a singular `handleXChange` method.
+- [ ] Create `div`-keys for every element; should be {parent(s)ID-myID}
 - [ ] Sort out `state` vs. `props`.
-- [ ] create `div`-keys for every element; should be {parent(s)ID-myID}
 
 Beautification
 -----------------
