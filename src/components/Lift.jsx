@@ -1,11 +1,14 @@
 import React, {Component} from 'react'
 import request from 'superagent'
+import {List} from 'immutable'
+
 import baseURL from '../constants.js'
+import LiftSet from './LiftSet.jsx'
 
 class Lift extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {liftID: undefined, sets: List()}
     this.handleNameChange = this.handleNameChange.bind(this)
     this.handleWarmupChange = this.handleWarmupChange.bind(this)
     this.handleNotesChange = this.handleNotesChange.bind(this)
@@ -59,6 +62,9 @@ class Lift extends Component {
   }
 
   render() {
+    let sets = this.state.sets.map((set) => {
+      return <LiftSet workoutID={this.props.workoutID} liftID={this.state.liftID} />
+    })
     return (
       <div id="lift">
         <td>
@@ -75,6 +81,7 @@ class Lift extends Component {
               onClick={this.submitLift} /></td>
           </tr>
         </td>
+        {sets}
       </div>
     )
   }

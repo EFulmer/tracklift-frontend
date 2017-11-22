@@ -79,7 +79,8 @@ class Workout extends Component {
   }
 
   render() {
-    let liftsComponent = this.state.lifts.map((lift) => {
+    // TODO should run a GET for the lifts for the workoutID if defined
+    let lifts = this.state.lifts.map((lift) => {
       return <Lift workoutID={this.state.workoutID} />
     })
     return (
@@ -90,7 +91,7 @@ class Workout extends Component {
                   onChange={this.handleDayChange} />
           <input type='submit' value='Save' />
         </form>
-        {liftsComponent}
+        {lifts}
       </div>
     )
   }
