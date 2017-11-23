@@ -62,8 +62,10 @@ class Lift extends Component {
   }
 
   render() {
-    let sets = this.state.sets.map((set) => {
-      return <LiftSet workoutID={this.props.workoutID} liftID={this.state.liftID} />
+    let sets = this.state.sets.map((set, idx) => {
+      return <LiftSet key={this.props.workoutID.toString() + '-' + this.props.liftID.toString() + '-' + idx.toString()} 
+                      workoutID={this.props.workoutID} 
+                      liftID={this.state.liftID} />
     })
     return (
       <div id="lift">

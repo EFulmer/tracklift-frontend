@@ -80,8 +80,9 @@ class Workout extends Component {
 
   render() {
     // TODO should run a GET for the lifts for the workoutID if defined
-    let lifts = this.state.lifts.map((lift) => {
-      return <Lift workoutID={this.state.workoutID} />
+    let lifts = this.state.lifts.map((lift, idx) => {
+      return <Lift key={this.state.workoutID.toString() + '-' + idx.toString()} 
+                   workoutID={this.state.workoutID} />
     })
     return (
       <div id='workout'>
