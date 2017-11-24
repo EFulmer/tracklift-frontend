@@ -14,21 +14,24 @@ class LiftSet extends Component {
     this.handleNotesChange = this.handleNotesChange.bind(this)
   }
 
-  handleWeightChange(value) {
-    this.setState({weight: value})
+  handleWeightChange(event) {
+    this.setState({weight: event.currentTarget.value})
   }
 
-  handleSetCountChange(value) {
-    this.setState({setCount: value})
+  handleSetCountChange(event) {
+    this.setState({setCount: event.currentTarget.value})
   }
-  handleRepCountChange(value) {
-    this.setState({repCount: value})
+
+  handleRepCountChange(event) {
+    this.setState({repCount: event.currentTarget.value})
   }
-  handleWarmupChange(value) {
-    this.setState({warmup: value})
+
+  handleWarmupChange(event) {
+    this.setState({warmup: event.currentTarget.checked})
   }
-  handleWeightChange(value) {
-    this.setState({notes: value})
+
+  handleNotesChange(event) {
+    this.setState({notes: event.currentTarget.value})
   }
 
   render() {

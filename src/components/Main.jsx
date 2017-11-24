@@ -37,10 +37,8 @@ class Main extends Component {
     return (
       <div id='app-main'>
         <h2>Main Page</h2>
-          <form>
-            <input type='submit' value='Add New Workout' onClick={this.addWorkout} />
-          </form>
-            {workouts}
+          <input type='button' target='#' value='Add New Workout' onClick={this.addWorkout} />
+          {workouts}
       </div>
     )
   }
