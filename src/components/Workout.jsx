@@ -14,6 +14,7 @@ class Workout extends Component {
     this.handleDayChange = this.handleDayChange.bind(this)
     this.submitWorkout = this.submitWorkout.bind(this)
     this.respHandler = this.respHandler.bind(this)
+    this.makeLiftKey = this.makeLiftKey.bind(this)
   }
 
   handleDayChange(value) {
@@ -44,12 +45,12 @@ class Workout extends Component {
     const month = String(this.state.day.month() + 1)
     const year = String(this.state.day.year())
     const day = month + '-' + date + '-' + year
-    const payload = {day: day}
+    const payload = JSON.stringify({day: day})
 
     // TODO could do helpers for these ... 
     if (workoutID === '') {
       request.post(reqURL)
-        .send(JSON.stringify(payload))
+        .send(payload)
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
         .type('json')
@@ -63,7 +64,7 @@ class Workout extends Component {
     }
     else {
       request.put(reqURL)
-        .send(JSON.stringify(payload))
+        .send(payload)
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
         .set('Cache-Control', 'no-cache')
@@ -78,11 +79,15 @@ class Workout extends Component {
     }
   }
 
+  makeLiftKey(idx) {
+    return this.state.workoutID.toString() + '-' + idx.toString()
+  }
+
   render() {
     // TODO should run a GET for the lifts for the workoutID if defined
     let lifts = this.state.lifts.map((lift, idx) => {
-      return <Lift key={this.state.workoutID.toString() + '-' + idx.toString()} 
-                   workoutID={this.state.workoutID} />
+      return <Lift key={this.makeLiftKey(idx)} 
+                   workoutID={this.state.workoutID} ord={idx+1} />
     })
     return (
       <div id='workout'>

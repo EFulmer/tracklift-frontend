@@ -8,55 +8,51 @@ import LiftSet from './LiftSet.jsx'
 class Lift extends Component {
   constructor(props) {
     super(props)
-    this.state = {liftID: undefined, sets: List()}
+    this.state = {liftID: undefined, sets: List(), name: undefined, notes: undefined, warmup: false}
     this.handleNameChange = this.handleNameChange.bind(this)
     this.handleWarmupChange = this.handleWarmupChange.bind(this)
     this.handleNotesChange = this.handleNotesChange.bind(this)
     this.submitLift = this.submitLift.bind(this)
   }
 
-  handleNameChange(value) {
-    this.setState({name: value})
+  handleNameChange(event) {
+    this.setState({name: event.currentTarget.value})
   }
 
-  handleWarmupChange(value) {
-    this.setState({warmup: value})
+  handleWarmupChange(event) {
+    this.setState({warm_up: event.currentTarget.value})
   }
 
-  handleNotesChange(value) {
-    this.setState({notes: value})
+  handleNotesChange(event) {
+    this.setState({notes: event.currentTarget.value})
   }
 
   submitLift() {
-    const workoutID = this.props.workoutID
-    const liftID = this.props.liftID ? this.props.liftID : ''
-    const reqURL = new URL('lift/' + liftID, baseURL)
-    const payload = {
-      workout: workoutID,
+    const liftID = this.props.liftID || ''
+    const reqURL = new URL('lifts/' + liftID, baseURL)
+    const payload = JSON.stringify({
+      workout: this.props.workoutID,
       name: this.state.name,
       warm_up: this.state.warmup,
-      lift_ord: 0 // TODO
-    }
+      lift_ord: this.props.ord
+    })
+
     if (liftID === '') {
       request.post(reqURL)
+        .send(payload)
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
-        .send(payload)
         .type('json')
         .end((err, res) => {
-          alert('err = ' + JSON.stringify(err))
-          alert('res = ' + JSON.stringify(res))
         })
     }
     else {
       request.put(reqURL)
+        .send(payload)
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
-        .send(payload)
         .type('json')
         .end((err, res) => {
-          alert('err = ' + JSON.stringify(err))
-          alert('res = ' + JSON.stringify(res))
         })
     }
   }
@@ -76,9 +72,9 @@ class Lift extends Component {
             <th>Notes</th>
           </tr>
           <tr>
-            <td><input id="name"   type="text"     defaultValue={this.state.name || ''}     onChange={this.handleNameChange} /></td>
-            <td><input id="warmup" type="checkbox" checked={this.state.warmup} onChange={this.handleWarmupChange} /></td>
-            <td><input id="notes"  type="text"     defaultValue={this.state.notes}    onChange={this.handleNotesChange} /></td>
+            <td><input id="name"   type="text"     defaultValue={this.state.name} onChange={this.handleNameChange} /></td>
+            <td><input id="warmup" type="checkbox" defaultValue={this.state.warm_up} onChange={this.handleWarmupChange} /></td>
+            <td><input id="notes"  type="text"     defaultValue={this.state.notes} onChange={this.handleNotesChange} /></td>
             <td><input id="save" type="button" value="Save Set"
               onClick={this.submitLift} /></td>
           </tr>
