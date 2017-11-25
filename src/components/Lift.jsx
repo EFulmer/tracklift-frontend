@@ -8,7 +8,13 @@ import LiftSet from './LiftSet.jsx'
 class Lift extends Component {
   constructor(props) {
     super(props)
-    this.state = {liftID: undefined, sets: List(), name: undefined, notes: undefined, warmup: false}
+    this.state = {
+      liftID: undefined,
+      sets: List(),
+      name: undefined,
+      warmup: false,
+      notes: ''
+    }
     this.handleNameChange = this.handleNameChange.bind(this)
     this.handleWarmupChange = this.handleWarmupChange.bind(this)
     this.handleNotesChange = this.handleNotesChange.bind(this)
@@ -38,14 +44,21 @@ class Lift extends Component {
       alert('There was an error saving your data to the database.\n\nError:' + JSON.stringify(resp))
     }
   }
+
   submitLift() {
-    const liftID = this.props.liftID || ''
+    if (!this.state.name) {
+      alert('Please enter a name for your lift.')
+      return
+    }
+
+    const liftID = this.state.liftID || ''
     const reqURL = new URL('lifts/' + liftID, baseURL)
     const payload = JSON.stringify({
       workout: this.props.workoutID,
       name: this.state.name,
-      warm_up: this.state.warm_up,
-      lift_ord: this.props.ord
+      warm_up: this.state.warmup,
+      lift_ord: this.props.ord,
+      notes: this.state.notes
     })
 
     if (liftID === '') {
@@ -67,6 +80,7 @@ class Lift extends Component {
         .send(payload)
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
+        .set('Cache-Control', 'no-cache')
         .type('json')
         .end((err, res) => {
           if (res) {
@@ -82,7 +96,8 @@ class Lift extends Component {
     let sets = this.state.sets.map((set, idx) => {
       return <LiftSet key={this.props.workoutID.toString() + '-' + this.state.liftID.toString() + '-' + idx.toString()} 
                       workoutID={this.props.workoutID} 
-                      liftID={this.state.liftID} />
+                      liftID={this.state.liftID} 
+                      ord={idx+1} />
     })
     return (
       <div id="lift">
@@ -94,7 +109,7 @@ class Lift extends Component {
           </tr>
           <tr>
             <td><input id="name"   type="text"     defaultValue={this.state.name} onChange={this.handleNameChange} /></td>
-            <td><input id="warmup" type="checkbox" defaultValue={this.state.warm_up} onChange={this.handleWarmupChange} /></td>
+            <td><input id="warmup" type="checkbox" defaultValue={this.state.warmup} onChange={this.handleWarmupChange} /></td>
             <td><input id="notes"  type="text"     defaultValue={this.state.notes} onChange={this.handleNotesChange} /></td>
             <td><input id="save" type="button" value="Save Set"
               onClick={this.submitLift} /></td>
