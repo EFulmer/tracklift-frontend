@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import request from 'superagent'
 
 import baseURL from '../constants.js'
+import {respHandler} from '../actions/actions.js'
 
 class LiftSet extends Component {
   constructor(props) {
@@ -42,15 +43,6 @@ class LiftSet extends Component {
     this.setState({notes: event.currentTarget.value})
   }
 
-  respHandler(resp) {
-    if (resp.statusCode === 200) {
-      const setID = resp.body.id
-      this.setState({setID: setID})
-    } else {
-      alert('There was an error saving your data to the database.\n\nError:' + JSON.stringify(resp))
-    }
-  }
-
   submitSet() {
     if (!this.state.weight) {
       alert('Please enter a weight.')
@@ -86,7 +78,7 @@ class LiftSet extends Component {
         .type('json')
         .end((err, res) => {
           if (res) {
-            this.respHandler(res)
+            respHandler(res)
           } else {
             alert('Error submitting workout: ' + JSON.stringify(err))
           }
@@ -101,7 +93,7 @@ class LiftSet extends Component {
         .type('json')
         .end((err, res) => {
           if (res) {
-            this.respHandler(res)
+            respHandler(res)
           } else {
             alert('Error submitting workout: ' + JSON.stringify(err))
           }
