@@ -6,6 +6,7 @@ import {List, Map} from 'immutable'
 
 import baseURL from '../constants.js'
 import Lift from './Lift.jsx'
+import {respHandler} from '../actions/actions.js'
 
 class Workout extends Component {
   constructor(props) {
@@ -13,25 +14,12 @@ class Workout extends Component {
     this.state = {day: moment(), workoutID: undefined, lifts: List()}
     this.handleDayChange = this.handleDayChange.bind(this)
     this.submitWorkout = this.submitWorkout.bind(this)
-    this.respHandler = this.respHandler.bind(this)
     this.makeLiftKey = this.makeLiftKey.bind(this)
   }
 
   handleDayChange(value) {
     const day = moment(value)
     this.setState({day: day})
-  }
-
-  respHandler(resp) {
-    if (resp.statusCode === 200) {
-      const workoutID = resp.body.id
-      this.setState({workoutID: workoutID})
-      if (this.state.lifts.isEmpty()) {
-        this.setState({lifts: this.state.lifts.push(Map())})
-      }
-    } else {
-      alert('There was an error saving your data to the database.\n\nError:' + JSON.stringify(resp))
-    }
   }
 
   submitWorkout() {
@@ -56,7 +44,7 @@ class Workout extends Component {
         .type('json')
         .end((err, res) => {
           if (res) {
-            this.respHandler(res)
+            respHandler(res)
           } else {
             alert('Error submitting workout: ' + JSON.stringify(err))
           }
@@ -71,7 +59,7 @@ class Workout extends Component {
         .type('json')
         .end((err, res) => {
           if (res) {
-            this.respHandler(res)
+            respHandler(res)
           } else {
             alert('Error submitting workout: ' + JSON.stringify(err))
           }
@@ -80,21 +68,21 @@ class Workout extends Component {
   }
 
   makeLiftKey(idx) {
-    return this.state.workoutID.toString() + '-' + idx.toString()
+    return this.state.workoutID.toString() + '-' + (idx + 1).toString()
   }
 
   render() {
     // TODO should run a GET for the lifts for the workoutID if defined
     let lifts = this.state.lifts.map((lift, idx) => {
       return <Lift key={this.makeLiftKey(idx)} 
-                   workoutID={this.state.workoutID} ord={idx+1} />
+        workoutID={this.state.workoutID} ord={idx+1} />
     })
     return (
       <div id='workout'>
         <h3>Workout</h3>
         <form action='#' onSubmit={this.submitWorkout}>
           <Picker open={true} defaultValue={this.state.day} 
-                  onChange={this.handleDayChange} />
+            onChange={this.handleDayChange} />
           <input type='submit' value='Save' />
         </form>
         {lifts}

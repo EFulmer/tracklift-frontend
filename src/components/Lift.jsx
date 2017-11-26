@@ -4,6 +4,7 @@ import {List, Map} from 'immutable'
 
 import baseURL from '../constants.js'
 import LiftSet from './LiftSet.jsx'
+import {respHandler} from '../actions/actions.js'
 
 class Lift extends Component {
   constructor(props) {
@@ -33,18 +34,6 @@ class Lift extends Component {
     this.setState({notes: event.currentTarget.value})
   }
 
-  respHandler(resp) {
-    if (resp.statusCode === 200) {
-      const liftID = resp.body.id
-      this.setState({liftID: liftID})
-      if (this.state.sets.isEmpty()) {
-        this.setState({sets: this.state.sets.push(Map())})
-      }
-    } else {
-      alert('There was an error saving your data to the database.\n\nError:' + JSON.stringify(resp))
-    }
-  }
-
   submitLift() {
     if (!this.state.name) {
       alert('Please enter a name for your lift.')
@@ -69,7 +58,7 @@ class Lift extends Component {
         .type('json')
         .end((err, res) => {
           if (res) {
-            this.respHandler(res)
+            respHandler(res)
           } else {
             alert('Error submitting workout: ' + JSON.stringify(err))
           }
@@ -84,7 +73,7 @@ class Lift extends Component {
         .type('json')
         .end((err, res) => {
           if (res) {
-            this.respHandler(res)
+            respHandler(res)
           } else {
             alert('Error submitting workout: ' + JSON.stringify(err))
           }

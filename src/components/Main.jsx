@@ -19,26 +19,26 @@ class Main extends Component {
   }
 
   deleteWorkout(workoutNum) {
-    // TODO must run delete query
     this.setState((prevState, props) => {
       return {workouts: prevState.workouts.delete(workoutNum)}
     })
   }
 
   render() {
-    let workouts = this.state.workouts.map((workout, idx) =>
-      <div id={'workout' + (idx + 1)}>
+    const workouts = this.state.workouts.map((workout, idx) =>
+      <div id={'workout-' + (idx + 1).toString()}>
         <form>
-          <input type='submit' value='Delete' onClick={() => this.deleteWorkout.call(this,idx)} />
+          <input type='submit' value='Delete' onClick={() => this.deleteWorkout.call(this, idx)} />
         </form>
         <Workout />
       </div>
     )
+
     return (
       <div id='app-main'>
         <h2>Main Page</h2>
-          <input type='button' target='#' value='Add New Workout' onClick={this.addWorkout} />
-          {workouts}
+        <input type='button' target='#' value='Add New Workout' onClick={this.addWorkout} />
+        {workouts}
       </div>
     )
   }
