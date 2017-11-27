@@ -100,7 +100,7 @@ class Lift extends Component {
             <td><input id="name"   type="text"     defaultValue={this.state.name} onChange={this.handleNameChange} /></td>
             <td><input id="warmup" type="checkbox" defaultValue={this.state.warmup} onChange={this.handleWarmupChange} /></td>
             <td><input id="notes"  type="text"     defaultValue={this.state.notes} onChange={this.handleNotesChange} /></td>
-            <td><input id="save" type="button" value="Save Set"
+            <td><input id="save" type="button" value="Save Lift"
               onClick={this.submitLift} /></td>
           </tr>
         </td>
