@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
 import {List} from 'immutable'
 
-import Workout from './Workout.jsx'
+import Workout from './Workout'
+import Lift from './Lift'
 
 class Main extends Component {
   constructor(props) {
@@ -24,13 +25,21 @@ class Main extends Component {
     })
   }
 
+  addLift() {
+    this.setState((prevState, props) => {
+      // TODO props
+      let newLift = <Lift />
+      return {lifts: prevState.lifts.push(newLift)}
+    })
+  }
+
   render() {
     const workouts = this.state.workouts.map((workout, idx) =>
       <div id={'workout-' + (idx + 1).toString()}>
         <form>
           <input type='submit' value='Delete' onClick={() => this.deleteWorkout.call(this, idx)} />
         </form>
-        <Workout />
+        <Workout addLift={this.addLift} />
       </div>
     )
 

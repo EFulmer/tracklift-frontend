@@ -78,7 +78,8 @@ class LiftSet extends Component {
         .type('json')
         .end((err, res) => {
           if (res) {
-            respHandler(res)
+            let setID = respHandler(res)
+            this.setState({setID: setID})
           } else {
             alert('Error submitting workout: ' + JSON.stringify(err))
           }
@@ -93,7 +94,8 @@ class LiftSet extends Component {
         .type('json')
         .end((err, res) => {
           if (res) {
-            respHandler(res)
+            let setID = respHandler(res)
+            this.setState({setID: setID})
           } else {
             alert('Error submitting workout: ' + JSON.stringify(err))
           }

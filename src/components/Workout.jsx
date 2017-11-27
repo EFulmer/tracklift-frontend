@@ -18,15 +18,15 @@ class Workout extends Component {
   }
 
   handleDayChange(value) {
+    if (moment(value) > moment()) {
+      alert("You cannot select a future date.")
+      return
+    }
     const day = moment(value)
     this.setState({day: day})
   }
 
   submitWorkout() {
-    if (this.state.day > moment()) {
-      alert("You cannot select a future date.")
-      return
-    }
     const workoutID = this.state.workoutID || ''
     const reqURL = new URL('workouts/' + workoutID, baseURL)
     const date = String(this.state.day.date())
@@ -44,7 +44,8 @@ class Workout extends Component {
         .type('json')
         .end((err, res) => {
           if (res) {
-            respHandler(res)
+            let resp = respHandler(res)
+            this.setState({workoutID: resp.body.id})
           } else {
             alert('Error submitting workout: ' + JSON.stringify(err))
           }
@@ -59,7 +60,8 @@ class Workout extends Component {
         .type('json')
         .end((err, res) => {
           if (res) {
-            respHandler(res)
+            let resp = respHandler(res)
+            this.setState({workoutID: resp.body.id})
           } else {
             alert('Error submitting workout: ' + JSON.stringify(err))
           }
@@ -85,6 +87,10 @@ class Workout extends Component {
             onChange={this.handleDayChange} />
           <input type='submit' value='Save' />
         </form>
+        {this.state.workoutID ? <input 
+          type='submit' 
+          value='Add Lift' 
+          onClick={this.props.addLift.bind(this)}/> : <div />}
         {lifts}
       </div>
     )
