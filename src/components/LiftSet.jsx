@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import request from 'superagent'
 
 import baseURL from '../constants.js'
-import {respHandler} from '../actions/actions.js'
 
 class LiftSet extends Component {
   constructor(props) {
@@ -78,8 +77,7 @@ class LiftSet extends Component {
         .type('json')
         .end((err, res) => {
           if (res) {
-            let setID = respHandler(res)
-            this.setState({setID: setID})
+            this.setState({setID: res.body.id})
           } else {
             alert('Error submitting workout: ' + JSON.stringify(err))
           }
@@ -94,8 +92,7 @@ class LiftSet extends Component {
         .type('json')
         .end((err, res) => {
           if (res) {
-            let setID = respHandler(res)
-            this.setState({setID: setID})
+            this.setState({setID: res.body.id})
           } else {
             alert('Error submitting workout: ' + JSON.stringify(err))
           }

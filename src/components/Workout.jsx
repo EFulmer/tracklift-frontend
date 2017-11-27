@@ -4,17 +4,17 @@ import moment from 'moment'
 import Picker from 'rc-calendar'
 import {List, Map} from 'immutable'
 
-import baseURL from '../constants.js'
-import Lift from './Lift.jsx'
-import {respHandler} from '../actions/actions.js'
+import {createUpdateWorkout} from '../actions/actions.js'
+import baseURL from '../constants'
+import Lift from './Lift'
 
 class Workout extends Component {
   constructor(props) {
     super(props)
     this.state = {day: moment(), workoutID: undefined, lifts: List()}
     this.handleDayChange = this.handleDayChange.bind(this)
-    this.submitWorkout = this.submitWorkout.bind(this)
     this.makeLiftKey = this.makeLiftKey.bind(this)
+    this.submitWorkout = this.submitWorkout.bind(this)
   }
 
   handleDayChange(value) {
@@ -26,8 +26,13 @@ class Workout extends Component {
     this.setState({day: day})
   }
 
+  makeLiftKey(idx) {
+    return this.state.workoutID.toString() + '-' + (idx + 1).toString()
+  }
+
   submitWorkout() {
     const workoutID = this.state.workoutID || ''
+    const method = this.state.workoutID ? 'put' : 'post'
     const reqURL = new URL('workouts/' + workoutID, baseURL)
     const date = String(this.state.day.date())
     const month = String(this.state.day.month() + 1)
@@ -35,47 +40,23 @@ class Workout extends Component {
     const day = month + '-' + date + '-' + year
     const payload = JSON.stringify({day: day})
 
-    // TODO could do helpers for these ... 
-    if (workoutID === '') {
-      request.post(reqURL)
-        .send(payload)
-        .set('Content-Type', 'application/json')
-        .set('Accept', 'application/json')
-        .type('json')
-        .end((err, res) => {
-          if (res) {
-            let resp = respHandler(res)
-            this.setState({workoutID: resp.body.id})
-          } else {
-            alert('Error submitting workout: ' + JSON.stringify(err))
-          }
-        })
-    }
-    else {
-      request.put(reqURL)
-        .send(payload)
-        .set('Content-Type', 'application/json')
-        .set('Accept', 'application/json')
-        .set('Cache-Control', 'no-cache')
-        .type('json')
-        .end((err, res) => {
-          if (res) {
-            let resp = respHandler(res)
-            this.setState({workoutID: resp.body.id})
-          } else {
-            alert('Error submitting workout: ' + JSON.stringify(err))
-          }
-        })
-    }
-  }
-
-  makeLiftKey(idx) {
-    return this.state.workoutID.toString() + '-' + (idx + 1).toString()
+    request(method, reqURL)
+      .send(payload)
+      .set('Content-Type', 'application/json')
+      .set('Accept', 'application/json')
+      .type('json')
+      .end((err, res) => {
+        if (res) {
+          this.setState({workoutID: res.body.id})
+        } else {
+          alert('Error submitting workout: ' + JSON.stringify(err))
+        }
+      })
   }
 
   render() {
     // TODO should run a GET for the lifts for the workoutID if defined
-    let lifts = this.state.lifts.map((lift, idx) => {
+    const lifts = this.state.lifts.map((lift, idx) => {
       return <Lift key={this.makeLiftKey(idx)} 
         workoutID={this.state.workoutID} ord={idx+1} />
     })
@@ -90,7 +71,7 @@ class Workout extends Component {
         {this.state.workoutID ? <input 
           type='submit' 
           value='Add Lift' 
-          onClick={this.props.addLift.bind(this)}/> : <div />}
+          onClick={this.props.addLiftComponent.bind(this)}/> : <div />}
         {lifts}
       </div>
     )

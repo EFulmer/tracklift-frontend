@@ -4,7 +4,6 @@ import {List, Map} from 'immutable'
 
 import baseURL from '../constants.js'
 import LiftSet from './LiftSet.jsx'
-import {respHandler} from '../actions/actions.js'
 
 class Lift extends Component {
   constructor(props) {
@@ -58,7 +57,7 @@ class Lift extends Component {
         .type('json')
         .end((err, res) => {
           if (res) {
-            respHandler(res)
+            this.setState({liftID: res.body.id})
           } else {
             alert('Error submitting workout: ' + JSON.stringify(err))
           }
@@ -73,7 +72,7 @@ class Lift extends Component {
         .type('json')
         .end((err, res) => {
           if (res) {
-            respHandler(res)
+            this.setState({liftID: res.body.id})
           } else {
             alert('Error submitting workout: ' + JSON.stringify(err))
           }
@@ -83,10 +82,11 @@ class Lift extends Component {
 
   render() {
     let sets = this.state.sets.map((set, idx) => {
-      return <LiftSet key={this.props.workoutID.toString() + '-' + this.state.liftID.toString() + '-' + idx.toString()} 
-                      workoutID={this.props.workoutID} 
-                      liftID={this.state.liftID} 
-                      ord={idx+1} />
+      return <LiftSet 
+        key={this.props.workoutID.toString() + '-' + this.state.liftID.toString() + '-' + idx.toString()} 
+        workoutID={this.props.workoutID} 
+        liftID={this.state.liftID} 
+        ord={idx+1} />
     })
     return (
       <div id="lift">
