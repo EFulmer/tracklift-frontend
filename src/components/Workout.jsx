@@ -31,27 +31,9 @@ class Workout extends Component {
   }
 
   submitWorkout() {
-    const workoutID = this.state.workoutID || ''
-    const method = this.state.workoutID ? 'put' : 'post'
-    const reqURL = new URL('workouts/' + workoutID, baseURL)
-    const date = String(this.state.day.date())
-    const month = String(this.state.day.month() + 1)
-    const year = String(this.state.day.year())
-    const day = month + '-' + date + '-' + year
-    const payload = JSON.stringify({day: day})
-
-    request(method, reqURL)
-      .send(payload)
-      .set('Content-Type', 'application/json')
-      .set('Accept', 'application/json')
-      .type('json')
-      .end((err, res) => {
-        if (res) {
-          this.setState({workoutID: res.body.id})
-        } else {
-          alert('Error submitting workout: ' + JSON.stringify(err))
-        }
-      })
+    createUpdateWorkout(this.state)
+      .then(res => this.setState({workoutID: res.id}))
+      .catch(err => alert('err = ' + err))
   }
 
   render() {
@@ -63,11 +45,9 @@ class Workout extends Component {
     return (
       <div id='workout'>
         <h3>Workout</h3>
-        <form action='#' onSubmit={this.submitWorkout}>
           <Picker open={true} defaultValue={this.state.day} 
             onChange={this.handleDayChange} />
-          <input type='submit' value='Save' />
-        </form>
+          <input type='submit' value='Save' onClick={this.submitWorkout} />
         {this.state.workoutID ? <input 
           type='submit' 
           value='Add Lift' 
