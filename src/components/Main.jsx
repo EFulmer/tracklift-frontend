@@ -21,17 +21,25 @@ class Main extends Component {
   }
 
   addLiftComponent(workoutIdx) {
-    const newLift = {sets: List()}
+    const newLift = Map({sets: List()})
     this.setState(prevState => {
       return {...prevState, workouts: prevState.workouts.updateIn([workoutIdx, 'lifts'], list => list.push(newLift))}
     })
   }
 
+  addSetComponent(workoutIdx, liftIdx) {
+    const newSet = Map()
+    this.setState(prevState => {
+      return {...prevState, workouts: prevState.workouts.updateIn([workoutIdx, 'lifts', liftIdx, 'sets'], list => list.push(newSet))}
+    })
+  }
+
   render() {
-    // TODO pass props into the workout
     const workouts = this.state.workouts.map((workout, idx) =>
-      <Workout lifts={workout.get('lifts')} 
-        addLiftComponent={this.addLiftComponent.bind(this, idx)} />
+      <Workout idx={idx}
+        lifts={workout.get('lifts')} 
+        addLiftComponent={this.addLiftComponent.bind(this, idx)} 
+        addSetComponent={this.addSetComponent.bind(this, idx)} />
     )
 
     return (

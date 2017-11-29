@@ -18,7 +18,7 @@ class Workout extends Component {
 
   handleDayChange(value) {
     if (moment(value) > moment()) {
-      alert("You cannot select a future date.")
+      alert('You cannot select a future date.')
       return
     }
     const day = moment(value)
@@ -33,7 +33,9 @@ class Workout extends Component {
 
   render() {
     const lifts = this.props.lifts.map((lift, idx) => {
-      return <Lift id={this.state.id} ord={idx+1} />
+      return <Lift idx={idx} 
+        sets={lift.get('sets')}
+        addSetComponent={() => this.props.addSetComponent(idx)} />
     })
 
     return (

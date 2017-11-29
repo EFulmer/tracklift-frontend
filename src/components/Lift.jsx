@@ -81,15 +81,14 @@ class Lift extends Component {
   }
 
   render() {
-    let sets = this.state.sets.map((set, idx) => {
+    let sets = this.props.sets.map((set, idx) => {
       return <LiftSet 
-        key={this.props.workoutID.toString() + '-' + this.state.liftID.toString() + '-' + idx.toString()} 
         workoutID={this.props.workoutID} 
         liftID={this.state.liftID} 
         ord={idx+1} />
     })
     return (
-      <div id="lift">
+      <div id='lift'>
         <td>
           <tr>
             <th>Lift</th>
@@ -97,14 +96,15 @@ class Lift extends Component {
             <th>Notes</th>
           </tr>
           <tr>
-            <td><input id="name"   type="text"     defaultValue={this.state.name} onChange={this.handleNameChange} /></td>
-            <td><input id="warmup" type="checkbox" defaultValue={this.state.warmup} onChange={this.handleWarmupChange} /></td>
-            <td><input id="notes"  type="text"     defaultValue={this.state.notes} onChange={this.handleNotesChange} /></td>
-            <td><input id="save" type="button" value="Save Lift"
+            <td><input id='name'   type='text'     defaultValue={this.state.name} onChange={this.handleNameChange} /></td>
+            <td><input id='warmup' type='checkbox' defaultValue={this.state.warmup} onChange={this.handleWarmupChange} /></td>
+            <td><input id='notes'  type='text'     defaultValue={this.state.notes} onChange={this.handleNotesChange} /></td>
+            <td><input id='save' type='button' value='Save Lift'
               onClick={this.submitLift} /></td>
           </tr>
         </td>
         {sets}
+        <input id='addlift' type='button' onClick={this.props.addSetComponent} value='Add Set' />
       </div>
     )
   }
