@@ -11,9 +11,8 @@ import Lift from './Lift'
 class Workout extends Component {
   constructor(props) {
     super(props)
-    this.state = {day: moment(), workoutID: undefined, lifts: List()}
+    this.state = {id: undefined, lifts: List()}
     this.handleDayChange = this.handleDayChange.bind(this)
-    this.makeLiftKey = this.makeLiftKey.bind(this)
     this.submitWorkout = this.submitWorkout.bind(this)
   }
 
@@ -26,32 +25,24 @@ class Workout extends Component {
     this.setState({day: day})
   }
 
-  makeLiftKey(idx) {
-    return this.state.workoutID.toString() + '-' + (idx + 1).toString()
-  }
-
   submitWorkout() {
     createUpdateWorkout(this.state)
-      .then(res => this.setState({workoutID: res.id}))
+      .then(res => this.setState({id: res.id}))
       .catch(err => alert('err = ' + err))
   }
 
   render() {
-    // TODO should run a GET for the lifts for the workoutID if defined
-    const lifts = this.state.lifts.map((lift, idx) => {
-      return <Lift key={this.makeLiftKey(idx)} 
-        workoutID={this.state.workoutID} ord={idx+1} />
+    const lifts = this.props.lifts.map((lift, idx) => {
+      return <Lift id={this.state.id} ord={idx+1} />
     })
+
     return (
       <div id='workout'>
         <h3>Workout</h3>
-          <Picker open={true} defaultValue={this.state.day} 
-            onChange={this.handleDayChange} />
-          <input type='submit' value='Save' onClick={this.submitWorkout} />
-        {this.state.workoutID ? <input 
-          type='submit' 
-          value='Add Lift' 
-          onClick={this.props.addLiftComponent.bind(this)}/> : <div />}
+        <Picker open={true} defaultValue={this.state.day} 
+          onChange={this.handleDayChange} />
+        <input type='submit' value='Save' onClick={this.submitWorkout} />
+        <input type='submit' value='Add Lift' onClick={this.props.addLiftComponent} />
         {lifts}
       </div>
     )

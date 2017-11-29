@@ -5,9 +5,9 @@ import fetch from 'isomorphic-fetch'
 import baseURL from '../constants.js'
 
 export function createUpdateWorkout(data) {
-  const workoutID = data.workoutID || ''
-  const method = data.workoutID ? 'PUT' : 'POST'
-  const reqURL = new URL('workouts/' + workoutID, baseURL)
+  const id = data.id || ''
+  const method = data.id ? 'PUT' : 'POST'
+  const reqURL = new URL('workouts/' + id, baseURL)
   const date = String(data.day.date())
   const month = String(data.day.month() + 1)
   const year = String(data.day.year())
@@ -25,10 +25,15 @@ export function createUpdateWorkout(data) {
     .catch(err => err)
 }
 
-export function handleResponse(response) {
-  if (response.statusCode && 
-      response.statusCode === 200 && 
-      response.body) {
-    // 
-  }
+export function deleteWorkout(id) {
+  const method = 'DELETE'
+  const reqURL = new URL('workouts/' + id, baseURL)
+
+  return fetch(reqURL, {
+    method: method,
+    headers: {
+      'Accept': 'application/json'
+    }
+  }).then(res => res.json())
+    .catch(err => err)
 }

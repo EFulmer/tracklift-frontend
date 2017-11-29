@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
-import {List} from 'immutable'
+import {List, Map} from 'immutable'
 
+import {createUpdateWorkout, deleteWorkout} from '../actions/actions'
 
 import Workout from './Workout'
 import Lift from './Lift'
@@ -10,46 +11,37 @@ class Main extends Component {
     super(props)
     this.state = {workouts: List()}
     this.addWorkoutComponent = this.addWorkoutComponent.bind(this)
-    this.deleteWorkout = this.deleteWorkout.bind(this)
   }
 
   addWorkoutComponent() {
-    let newWorkout = <Workout 
-      addLiftComponent={this.addLiftComponent} />
-    this.setState((prevState, props) => {
-      return {workouts: prevState.workouts.push(newWorkout)}
+    const newWorkout = Map({lifts: List()})
+    this.setState(prevState => {
+      return {...prevState, workouts: prevState.workouts.push(newWorkout)}
     })
   }
 
-  deleteWorkout(workoutNum) {
-    // TODO call delete
-    this.setState((prevState, props) => {
-      return {workouts: prevState.workouts.delete(workoutNum)}
-    })
-  }
-
-  addLiftComponent() {
-    this.setState((prevState, props) => {
-      let newLift = <Lift />
-      return {lifts: prevState.lifts.push(newLift)}
+  addLiftComponent(workoutIdx) {
+    const newLift = {sets: List()}
+    this.setState(prevState => {
+      return {...prevState, workouts: prevState.workouts.updateIn([workoutIdx, 'lifts'], list => list.push(newLift))}
     })
   }
 
   render() {
+    // TODO pass props into the workout
     const workouts = this.state.workouts.map((workout, idx) =>
-      <div id={'workout-' + (idx + 1).toString()}>
-        <form>
-          <input type='submit' value='Delete' onClick={() => this.deleteWorkout.call(this, idx)} />
-        </form>
-        {workout}
-      </div>
+      <Workout lifts={workout.get('lifts')} 
+        addLiftComponent={this.addLiftComponent.bind(this, idx)} />
     )
 
     return (
       <div id='app-main'>
         <h2>Main Page</h2>
-        <input type='button' target='#' value='Add New Workout' onClick={this.addWorkoutComponent} />
+        <input type='button' 
+          value='Add New Workout' 
+          onClick={this.addWorkoutComponent} />
         {workouts}
+        <input type='button' value='See State' onClick={() => alert(JSON.stringify(this.state))} />
       </div>
     )
   }
