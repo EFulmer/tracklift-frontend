@@ -1,10 +1,9 @@
 import React, {Component} from 'react'
-import {List, Map} from 'immutable'
 
-import {createUpdateWorkout, deleteWorkout} from '../actions/actions'
+import {List, Map} from 'immutable'
+import moment from 'moment'
 
 import Workout from './Workout'
-import Lift from './Lift'
 
 class Main extends Component {
   constructor(props) {
@@ -14,7 +13,7 @@ class Main extends Component {
   }
 
   addWorkoutComponent() {
-    const newWorkout = Map({lifts: List()})
+    const newWorkout = Map({day: moment(), lifts: List()})
     this.setState(prevState => {
       return {...prevState, workouts: prevState.workouts.push(newWorkout)}
     })
@@ -34,12 +33,25 @@ class Main extends Component {
     })
   }
 
+  handleDayChange(workoutIdx) {
+    const value = this.state.workouts.get(workoutIdx).get('day')
+    if (moment(value) > moment()) {
+      alert('You cannot select a future date.')
+      return
+    }
+    this.setState(prevState => {
+      return {...prevState, workouts: prevState.workouts.update(workoutIdx, workout => workout.set('day', value))}
+    })
+  }
+
   render() {
     const workouts = this.state.workouts.map((workout, idx) =>
       <Workout idx={idx}
+        day={workout.get('day')}
         lifts={workout.get('lifts')} 
         addLiftComponent={this.addLiftComponent.bind(this, idx)} 
-        addSetComponent={this.addSetComponent.bind(this, idx)} />
+        addSetComponent={this.addSetComponent.bind(this, idx)} 
+        handleDayChange={this.handleDayChange.bind(this, idx)} />
     )
 
     return (
