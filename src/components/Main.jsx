@@ -34,7 +34,7 @@ class Main extends Component {
   }
 
   handleDayChange(workoutIdx) {
-    const value = this.state.workouts.get(workoutIdx).get('day')
+    const value = this.state.workouts.getIn([workoutIdx, 'day'])
     if (moment(value) > moment()) {
       alert('You cannot select a future date.')
       return
@@ -44,6 +44,9 @@ class Main extends Component {
     })
   }
 
+  submitWorkout(workoutIdx) {
+  }
+
   render() {
     const workouts = this.state.workouts.map((workout, idx) =>
       <Workout idx={idx}
@@ -51,7 +54,8 @@ class Main extends Component {
         lifts={workout.get('lifts')} 
         addLiftComponent={this.addLiftComponent.bind(this, idx)} 
         addSetComponent={this.addSetComponent.bind(this, idx)} 
-        handleDayChange={this.handleDayChange.bind(this, idx)} />
+        handleDayChange={this.handleDayChange.bind(this, idx)} 
+        submitWorkout={this.submitWorkout.bind(this, idx)} />
     )
 
     return (
