@@ -3,6 +3,7 @@ import React, {Component} from 'react'
 import {List, Map} from 'immutable'
 import moment from 'moment'
 
+import {createUpdateWorkout} from '../actions/actions'
 import Workout from './Workout'
 
 class Main extends Component {
@@ -13,7 +14,7 @@ class Main extends Component {
   }
 
   addWorkoutComponent() {
-    const newWorkout = Map({day: moment(), lifts: List()})
+    const newWorkout = Map({lifts: List()})
     this.setState(prevState => {
       return {...prevState, workouts: prevState.workouts.push(newWorkout)}
     })
@@ -33,18 +34,23 @@ class Main extends Component {
     })
   }
 
-  handleDayChange(workoutIdx) {
-    const value = this.state.workouts.getIn([workoutIdx, 'day'])
+  handleDayChange(workoutIdx, value) {
     if (moment(value) > moment()) {
       alert('You cannot select a future date.')
       return
     }
     this.setState(prevState => {
-      return {...prevState, workouts: prevState.workouts.update(workoutIdx, workout => workout.set('day', value))}
+      return {workouts: prevState.workouts.update(workoutIdx, workout => workout.set('day', value))}
     })
   }
 
   submitWorkout(workoutIdx) {
+    const workout = this.state.workouts.get(workoutIdx)
+    const result = createUpdateWorkout(workout)
+      .then(res => this.setState(prevState => {
+        return {workouts: prevState.workouts.setIn([workoutIdx, 'id'], res.id)}
+      }))
+      .catch(err => alert('err = ' + err))
   }
 
   render() {

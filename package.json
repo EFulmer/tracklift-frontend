@@ -3,13 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "es6-promise": "^4.1.1",
     "immutable": "^3.8.2",
+    "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.4",
     "moment": "^2.19.1",
     "rc-calendar": "^9.1.12",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
+    "react-redux": "^5.0.6",
     "react-scripts": "1.0.13",
+    "redux": "^3.7.2",
     "request": "^2.83.0",
     "superagent": "^3.6.3"
   },

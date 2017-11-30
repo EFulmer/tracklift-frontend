@@ -5,12 +5,12 @@ import fetch from 'isomorphic-fetch'
 import baseURL from '../constants.js'
 
 export function createUpdateWorkout(data) {
-  const id = data.id || ''
-  const method = data.id ? 'PUT' : 'POST'
+  const id = data.get('id') || ''
+  const method = data.get('id') ? 'PUT' : 'POST'
   const reqURL = new URL('workouts/' + id, baseURL)
-  const date = String(data.day.date())
-  const month = String(data.day.month() + 1)
-  const year = String(data.day.year())
+  const date = String(data.get('day').date())
+  const month = String(data.get('day').month() + 1)
+  const year = String(data.get('day').year())
   const day = month + '-' + date + '-' + year
   const payload = JSON.stringify({day: day})
 
@@ -22,7 +22,6 @@ export function createUpdateWorkout(data) {
       'Accept': 'application/json'
     }
   }).then(res => res.json())
-    .catch(err => err)
 }
 
 export function deleteWorkout(id) {
