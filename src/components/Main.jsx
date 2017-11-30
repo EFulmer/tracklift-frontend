@@ -13,24 +13,11 @@ class Main extends Component {
     this.addWorkoutComponent = this.addWorkoutComponent.bind(this)
   }
 
+  // workout methods
   addWorkoutComponent() {
     const newWorkout = Map({lifts: List()})
     this.setState(prevState => {
       return {...prevState, workouts: prevState.workouts.push(newWorkout)}
-    })
-  }
-
-  addLiftComponent(workoutIdx) {
-    const newLift = Map({sets: List()})
-    this.setState(prevState => {
-      return {...prevState, workouts: prevState.workouts.updateIn([workoutIdx, 'lifts'], list => list.push(newLift))}
-    })
-  }
-
-  addSetComponent(workoutIdx, liftIdx) {
-    const newSet = Map()
-    this.setState(prevState => {
-      return {...prevState, workouts: prevState.workouts.updateIn([workoutIdx, 'lifts', liftIdx, 'sets'], list => list.push(newSet))}
     })
   }
 
@@ -67,6 +54,58 @@ class Main extends Component {
         return {workouts: prevState.workouts.delete(workoutIdx)}
       })
     }
+  }
+
+  // lift methods
+  addLiftComponent(workoutIdx) {
+    const newLift = Map({sets: List()})
+    this.setState(prevState => {
+      return {...prevState, workouts: prevState.workouts.updateIn([workoutIdx, 'lifts'], list => list.push(newLift))}
+    })
+  }
+
+  handleNameChange(workoutIdx, liftIdx, value) {
+  }
+
+  handleWarmupChange(workoutIdx, liftIdx, value) {
+  }
+
+  handleNotesChange(workoutIdx, liftIdx, value) {
+  }
+
+  submitLift(workoutIdx, liftIdx) {
+  }
+
+  deleteLiftComponent(workoutIdx, liftIdx) {
+  }
+
+  // set methods
+  addSetComponent(workoutIdx, liftIdx) {
+    const newSet = Map()
+    this.setState(prevState => {
+      return {...prevState, workouts: prevState.workouts.updateIn([workoutIdx, 'lifts', liftIdx, 'sets'], list => list.push(newSet))}
+    })
+  }
+
+  handleWeightChange(workoutIdx, liftIdx, setIdx, value) {
+  }
+
+  handleRepCountChange(workoutIdx, liftIdx, setIdx, value) {
+  }
+
+  handleSetCountChange(workoutIdx, liftIdx, setIdx, value) {
+  }
+
+  handleWarmupChange(workoutIdx, liftIdx, setIdx, value) {
+  }
+
+  handleNotesChange(workoutIdx, liftIdx, setIdx, value) {
+  }
+
+  submitSet(workoutIdx, liftIdx, setIdx) {
+  }
+
+  deleteSet(workoutIdx, liftIdx, setIdx) {
   }
 
   render() {
