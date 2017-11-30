@@ -3,7 +3,7 @@ import React, {Component} from 'react'
 import {List, Map} from 'immutable'
 import moment from 'moment'
 
-import {createUpdateWorkout} from '../actions/actions'
+import {createUpdateWorkout, deleteWorkout} from '../actions/actions'
 import Workout from './Workout'
 
 class Main extends Component {
@@ -46,11 +46,27 @@ class Main extends Component {
 
   submitWorkout(workoutIdx) {
     const workout = this.state.workouts.get(workoutIdx)
-    const result = createUpdateWorkout(workout)
+    createUpdateWorkout(workout)
       .then(res => this.setState(prevState => {
         return {workouts: prevState.workouts.setIn([workoutIdx, 'id'], res.id)}
       }))
       .catch(err => alert('err = ' + err))
+  }
+
+  deleteWorkoutComponent(workoutIdx) {
+    const workout = this.state.workouts.get(workoutIdx)
+    if (workout.get('id')) { 
+      // TODO cascade to lower components (API handles the database)
+      deleteWorkout(workout.get('id'))
+        .then(res => this.setState(prevState => {
+          return {workouts: prevState.workouts.delete(workoutIdx)}
+        })
+        ).catch(err => alert('err = ' + err))
+    } else {
+      this.setState(prevState => {
+        return {workouts: prevState.workouts.delete(workoutIdx)}
+      })
+    }
   }
 
   render() {
@@ -61,7 +77,8 @@ class Main extends Component {
         addLiftComponent={this.addLiftComponent.bind(this, idx)} 
         addSetComponent={this.addSetComponent.bind(this, idx)} 
         handleDayChange={this.handleDayChange.bind(this, idx)} 
-        submitWorkout={this.submitWorkout.bind(this, idx)} />
+        submitWorkout={this.submitWorkout.bind(this, idx)}
+        deleteWorkoutComponent={this.deleteWorkoutComponent.bind(this, idx)} />
     )
 
     return (

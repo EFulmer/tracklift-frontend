@@ -20,8 +20,9 @@ class Workout extends Component {
         <h3>Workout</h3>
         <Picker open={true} defaultValue={this.props.day} 
           onChange={this.props.handleDayChange} />
-        <input type='submit' value='Save' onClick={this.props.submitWorkout} />
+        <input type='submit' value='Save Workout' onClick={this.props.submitWorkout} />
         <input type='submit' value='Add Lift' onClick={this.props.addLiftComponent} />
+        <input type='submit' value='Delete Workout' onClick={this.props.deleteWorkoutComponent} />
         {lifts}
       </div>
     )

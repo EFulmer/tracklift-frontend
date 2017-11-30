@@ -19,8 +19,11 @@ Coding Style
 - [ ] Create `div`-keys for `Workout`
 - [ ] Sort out `state` vs. `props`.
 - [ ] Switch all objects to `immutable.Map`.
+- [ ] Babel plugin for support of `::` operator.
 
 Beautification
 -----------------
 - [ ] Center calendar.
 - [ ] Clean up Calendar component.
+
+
