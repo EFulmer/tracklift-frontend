@@ -3,7 +3,7 @@ import React, {Component} from 'react'
 import {List, Map} from 'immutable'
 import moment from 'moment'
 
-import {createUpdateWorkout, deleteWorkout} from '../actions/actions'
+import {createUpdateWorkout, deleteWorkout} from '../actions/workout'
 import Workout from './Workout'
 
 class Main extends Component {

@@ -1,5 +1,3 @@
-import moment from 'moment'
-import request from 'superagent'
 import fetch from 'isomorphic-fetch'
 
 import baseURL from '../constants.js'

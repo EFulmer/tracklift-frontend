@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import request from 'superagent'
-import {List, Map} from 'immutable'
+import {List} from 'immutable'
 
 import baseURL from '../constants.js'
 import LiftSet from './LiftSet.jsx'

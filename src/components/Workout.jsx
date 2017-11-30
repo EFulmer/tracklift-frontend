@@ -4,10 +4,6 @@ import Picker from 'rc-calendar'
 import Lift from './Lift'
 
 class Workout extends Component {
-  constructor(props) {
-    super(props)
-  }
-
   render() {
     const lifts = this.props.lifts.map((lift, idx) => {
       return <Lift idx={idx} 
