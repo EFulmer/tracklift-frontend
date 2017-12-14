@@ -65,12 +65,21 @@ class Main extends Component {
   }
 
   handleNameChange(workoutIdx, liftIdx, value) {
+    this.setState(prevState => {
+      return {workouts: prevState.workouts.setIn([workoutIdx, 'lifts', liftIdx, 'name'], value)}
+    })
   }
 
   handleWarmupChange(workoutIdx, liftIdx, value) {
+    this.setState(prevState => {
+      return {...prevState, workouts: prevState.workouts.setIn([workoutIdx, 'lifts', liftIdx, 'warmup'], value)}
+    })
   }
 
   handleNotesChange(workoutIdx, liftIdx, value) {
+    this.setState(prevState => {
+      return {...prevState, workouts: prevState.workouts.setIn([workoutIdx, 'lifts', liftIdx, 'notes'], value)}
+    })
   }
 
   submitLift(workoutIdx, liftIdx) {
@@ -96,10 +105,10 @@ class Main extends Component {
   handleSetCountChange(workoutIdx, liftIdx, setIdx, value) {
   }
 
-  handleWarmupChange(workoutIdx, liftIdx, setIdx, value) {
+  handleSetWarmupChange(workoutIdx, liftIdx, setIdx, value) {
   }
 
-  handleNotesChange(workoutIdx, liftIdx, setIdx, value) {
+  handleSetNotesChange(workoutIdx, liftIdx, setIdx, value) {
   }
 
   submitSet(workoutIdx, liftIdx, setIdx) {
@@ -117,7 +126,10 @@ class Main extends Component {
         addSetComponent={this.addSetComponent.bind(this, idx)} 
         handleDayChange={this.handleDayChange.bind(this, idx)} 
         submitWorkout={this.submitWorkout.bind(this, idx)}
-        deleteWorkoutComponent={this.deleteWorkoutComponent.bind(this, idx)} />
+        deleteWorkoutComponent={this.deleteWorkoutComponent.bind(this, idx)}
+        handleNameChange={this.handleNameChange.bind(this, idx)}
+        handleWarmupChange={this.handleWarmupChange.bind(this, idx)}
+        handleNotesChange={this.handleNotesChange.bind(this, idx)} />
     )
 
     return (

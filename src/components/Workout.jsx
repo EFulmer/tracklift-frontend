@@ -8,7 +8,12 @@ class Workout extends Component {
     const lifts = this.props.lifts.map((lift, idx) => {
       return <Lift idx={idx} 
         sets={lift.get('sets')}
-        addSetComponent={() => this.props.addSetComponent(idx)} />
+        name={lift.get('name')}
+        warmup={lift.get('warmup')}
+        addSetComponent={() => this.props.addSetComponent(idx)}
+        handleNameChange={this.props.handleNameChange}
+        handleWarmupChange={() => this.props.handleWarmupChange(idx)}
+        handleNotesChange={() => this.props.handleNotesChange(idx)} />
     })
 
     return (

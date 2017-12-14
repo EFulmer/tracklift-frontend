@@ -2,15 +2,14 @@ import fetch from 'isomorphic-fetch'
 
 import baseURL from '../constants.js'
 
-export function createUpdateWorkout(data) {
+export function createUpdateLift(data) {
   const id = data.get('id') || ''
   const method = data.get('id') ? 'PUT' : 'POST'
-  const reqURL = new URL('workouts/' + id, baseURL)
-  const date = String(data.get('day').date())
-  const month = String(data.get('day').month() + 1)
-  const year = String(data.get('day').year())
-  const day = month + '-' + date + '-' + year
-  const payload = JSON.stringify({day})
+  const reqURL = new URL('lifts/' + id, baseURL)
+  const name = data.get('name')
+  const warmup = data.get('warmup')
+  const notes = data.get('notes') || ''
+  const payload = JSON.stringify({name, warm_up: warmup, notes})
 
   return fetch(reqURL, {
     method: method,
@@ -22,9 +21,9 @@ export function createUpdateWorkout(data) {
   }).then(res => res.json())
 }
 
-export function deleteWorkout(id) {
+export function deleteLift(id) {
   const method = 'DELETE'
-  const reqURL = new URL('workouts/' + id, baseURL)
+  const reqURL = new URL('lifts/' + id, baseURL)
 
   return fetch(reqURL, {
     method: method,
