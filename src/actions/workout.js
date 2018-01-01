@@ -12,6 +12,8 @@ export function createUpdateWorkout(data) {
   const day = month + '-' + date + '-' + year
   const payload = JSON.stringify({day})
 
+  alert(reqURL)
+
   return fetch(reqURL, {
     method: method,
     body: payload,

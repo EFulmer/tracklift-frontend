@@ -65,6 +65,7 @@ class Main extends Component {
   }
 
   handleNameChange(workoutIdx, liftIdx, value) {
+    alert('workoutIdx = ' + workoutIdx + ', liftIdx = ' + liftIdx + 'value = ' + value)
     this.setState(prevState => {
       return {workouts: prevState.workouts.setIn([workoutIdx, 'lifts', liftIdx, 'name'], value)}
     })
