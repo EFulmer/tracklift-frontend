@@ -6,6 +6,8 @@ import moment from 'moment'
 import {createUpdateWorkout, deleteWorkout} from '../actions/workout'
 import Workout from './Workout'
 
+import reducer from '../reducer'
+
 class Main extends Component {
   constructor(props) {
     super(props)
