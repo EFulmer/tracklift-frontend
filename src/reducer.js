@@ -1,11 +1,19 @@
-export default reducer = (state, action) => {
+import {List, Map} from 'immutable'
+
+const defaultState = Map({workouts: List()})
+
+export const reducer = (state=defaultState, action) => {
+  // I dislike this forward declaration.
+  let newState
   switch (action.type) {
   case ADD_WORKOUT:
-    return state;
+    newState = state.updateIn(['workouts'], (workouts) => workouts.push(Map()));
+    return newState;
   case HIDE_WORKOUT:
     return state;
   case REMOVE_WORKOUT:
-    return state;
+    newState = state.deleteIn(['workouts', action.workoutIdx], (workouts) => workouts.delete(action.workoutIdx))
+    return newState;
   case POST_WORKOUT:
     return state;
   case PUT_WORKOUT:
@@ -72,7 +80,7 @@ export const DELETE_SET = 'DELETE_SET'
 // Action creators
 export const addWorkout = () => { type: ADD_WORKOUT }
 export const hideWorkout = () => { type: HIDE_WORKOUT }
-export const removeWorkout = () => { type: REMOVE_WORKOUT }
+export const removeWorkout = (workoutIdx) => { type: REMOVE_WORKOUT, workoutIdx }
 export const postWorkout = () => { type: POST_WORKOUT }
 export const putWorkout = () => { type: PUT_WORKOUT }
 export const deleteWorkout = () => { type: DELETE_WORKOUT }
