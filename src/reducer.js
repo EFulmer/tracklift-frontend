@@ -7,12 +7,14 @@ export const reducer = (state=defaultState, action) => {
   let newState
   switch (action.type) {
   case ADD_WORKOUT:
-    newState = state.updateIn(['workouts'], (workouts) => workouts.push(Map()));
+    newState = state.updateIn(['workouts'], 
+      (workouts) => workouts.push(Map()));
     return newState;
   case HIDE_WORKOUT:
     return state;
   case REMOVE_WORKOUT:
-    newState = state.deleteIn(['workouts', action.workoutIdx], (workouts) => workouts.delete(action.workoutIdx))
+    newState = state.deleteIn(['workouts', action.workoutIdx], 
+      (workouts) => workouts.delete(action.workoutIdx))
     return newState;
   case POST_WORKOUT:
     return state;
