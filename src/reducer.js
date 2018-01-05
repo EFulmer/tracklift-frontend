@@ -7,47 +7,55 @@ export const reducer = (state=defaultState, action) => {
   let newState
   switch (action.type) {
   case ADD_WORKOUT:
-    newState = state.updateIn(['workouts'], 
+    newState = state.updateIn(['workouts'],
       (workouts) => workouts.push(Map()));
-    return newState;
+    return newState
   case HIDE_WORKOUT:
-    return state;
+    return state
   case REMOVE_WORKOUT:
-    newState = state.deleteIn(['workouts', action.workoutIdx], 
+    newState = state.updateIn(['workouts'],
       (workouts) => workouts.delete(action.workoutIdx))
-    return newState;
+    return newState
   case POST_WORKOUT:
-    return state;
+    return state
   case PUT_WORKOUT:
-    return state;
+    return state
   case DELETE_WORKOUT:
-    return state;
+    return state
   case ADD_LIFT:
-    return state;
+    newState = state.updateIn(['workouts', action.workoutIdx, 'lifts'],
+      (lifts) => lifts.push(Map()))
+    return newState
   case HIDE_LIFT:
-    return state;
+    return state
   case REMOVE_LIFT:
-    return state;
+    newState = state.updateIn(['workouts', action.workoutIdx, 'lifts'],
+      (lifts) => lifts.delete(action.liftIdx))
+    return newState
   case POST_LIFT:
-    return state;
+    return state
   case PUT_LIFT:
-    return state;
+    return state
   case DELETE_LIFT:
-    return state;
+    return state
   case ADD_SET:
-    return state;
+    newState = state.updateIn(['workouts', action.workoutIdx, 'lifts', actions.liftIdx, 'sets'],
+      (sets) => sets.push(Map()))
+    return newState
   case HIDE_SET:
-    return state;
+    return state
   case REMOVE_SET:
-    return state;
+    newState = state.updateIn(['workouts', action.workoutIdx, 'lifts', action.liftIdx, 'sets'],
+      (sets) => sets.delete(action.setIdx))
+    return newState
   case POST_SET:
-    return state;
+    return state
   case PUT_SET:
-    return state;
+    return state
   case DELETE_SET:
-    return state;
+    return state
   default:
-    return state;
+    return state
   }
 }
 
