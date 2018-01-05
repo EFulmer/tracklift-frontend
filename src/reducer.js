@@ -39,7 +39,7 @@ export const reducer = (state=defaultState, action) => {
   case DELETE_LIFT:
     return state
   case ADD_SET:
-    newState = state.updateIn(['workouts', action.workoutIdx, 'lifts', actions.liftIdx, 'sets'],
+    newState = state.updateIn(['workouts', action.workoutIdx, 'lifts', action.liftIdx, 'sets'],
       (sets) => sets.push(Map()))
     return newState
   case HIDE_SET:
@@ -89,18 +89,18 @@ export const DELETE_SET = 'DELETE_SET'
 
 // Action creators
 export const addWorkout = () => { type: ADD_WORKOUT }
-export const hideWorkout = () => { type: HIDE_WORKOUT }
+export const hideWorkout = (workoutIdx) => { type: HIDE_WORKOUT, workoutIdx }
 export const removeWorkout = (workoutIdx) => { type: REMOVE_WORKOUT, workoutIdx }
 export const postWorkout = () => { type: POST_WORKOUT }
 export const putWorkout = () => { type: PUT_WORKOUT }
 export const deleteWorkout = () => { type: DELETE_WORKOUT }
 
-export const addLift = () => { type: ADD_LIFT }
-export const hideLift = () => { type: HIDE_LIFT }
-export const removeLift = () => { type: REMOVE_LIFT }
-export const postLift = () => { type: POST_LIFT }
-export const putLift = () => { type: PUT_LIFT }
-export const deleteLift = () => { type: DELETE_LIFT }
+export const addLift = (workoutIdx) => { type: ADD_LIFT, workoutIdx }
+export const hideLift = (workoutIdx, liftIdx) => { type: HIDE_LIFT, workoutIdx }
+export const removeLift = (workoutIdx, liftIdx) => { type: REMOVE_LIFT, workoutIdx }
+export const postLift = (workoutIdx, liftIdx) => { type: POST_LIFT }
+export const putLift = (workoutIdx, liftIdx) => { type: PUT_LIFT }
+export const deleteLift = (workoutIdx, liftIdx) => { type: DELETE_LIFT }
 
 export const addSet = () => { type: ADD_SET }
 export const hideSet = () => { type: HIDE_SET }
